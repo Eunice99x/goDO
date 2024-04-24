@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 type Todo struct {
@@ -17,6 +18,8 @@ func main() {
 	app := fiber.New()
 
 	tasks := []Todo{}
+
+	app.Use(cors.New())
 
 	app.Post("/api/add", func(c *fiber.Ctx) error {
 		task := &Todo{}

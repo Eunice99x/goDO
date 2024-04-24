@@ -4,9 +4,26 @@ function App() {
   const [tasks, setTasks] = useState<string[]>([]);
   const [task, setTask] = useState<string>("");
 
-  const addTask = () => {
+  const addTask = async () => {
     setTask("");
     setTasks([...tasks, task]);
+
+    const info = {
+      title: task,
+      body: task,
+    };
+
+    try {
+      const res = await fetch("http://localhost:8080/api/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(info),
+      });
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="bg-[#333] h-screen">
@@ -26,8 +43,10 @@ function App() {
             className="bg-green-600 text-white p-2 rounded cursor-pointer"
             onClick={addTask}
           />
-          {tasks.map((TASK) => (
-            <div className="bg-black text-white mb-2 p-2 rounded">{TASK}</div>
+          {tasks.map((TASK, id) => (
+            <div key={id} className="bg-black text-white mb-2 p-2 rounded">
+              {TASK}
+            </div>
           ))}
         </div>
       </div>
